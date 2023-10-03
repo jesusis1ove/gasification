@@ -38,7 +38,25 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'rest_framework',
+    'rest_framework_simplejwt',
+
+    'apps.accounts.apps.AccountsConfig',
+    'apps.orders.apps.OrdersConfig',
+    'apps.erp_data.apps.ErpDataConfig',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}
+
+AUTH_USER_MODEL = 'accounts.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -93,7 +111,7 @@ DATABASES = {
     }
 }
 
-DATABASE_ROUTERS = ['djangoGasification.db_routers.ErpRouter',]
+DATABASE_ROUTERS = ['djangoGasification.db_routers.ErpDataRouter',]
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
