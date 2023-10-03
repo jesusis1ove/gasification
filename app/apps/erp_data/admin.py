@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Counterparties
+
+
+@admin.register(Counterparties)
+class CounterpartiesAdmin(admin.ModelAdmin):
+    pass
