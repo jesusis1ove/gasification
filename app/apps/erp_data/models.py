@@ -8,7 +8,7 @@
 
 from django.db import models
 
-class ConstructionObjects(models.Model):
+class ConstructionObject(models.Model):
     address_house_number = models.CharField(max_length=255, blank=True, null=True)
     address_city = models.CharField(max_length=255, blank=True, null=True)
     address_locality = models.CharField(max_length=255, blank=True, null=True)
@@ -29,7 +29,7 @@ class ConstructionObjects(models.Model):
         db_table_comment = 'MGS_╬с·хъЄ√╧ЁюхъЄшЁютрэш ╤ЄЁюшЄхы№ёЄтр'
 
 
-class Counterparties(models.Model):
+class Counterparty(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     registration_date = models.DateField(blank=True, null=True, db_comment='─рЄр уюёєфрЁёЄтхээющ ЁхушёЄЁрЎшш')
     counterparty_head_guid = models.CharField(db_column='counterparty_head_GUID', max_length=150, blank=True, null=True, db_comment='├юыютэющ ъюэЄЁрухэЄ')  # Field name made lowercase.
@@ -50,7 +50,7 @@ class Counterparties(models.Model):
         db_table_comment = '╩юэЄЁрухэЄ√'
 
 
-class CounterpartyOrders(models.Model):
+class CounterpartyOrder(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     accepted_date = models.DateTimeField(blank=True, null=True)
     departure_date = models.DateTimeField(blank=True, null=True)
@@ -72,7 +72,7 @@ class CounterpartyOrders(models.Model):
         db_table_comment = '╟р тъш эр ╬╩'
 
 
-class OrderTypes(models.Model):
+class OrderType(models.Model):
     name = models.CharField(max_length=150, blank=True, null=True)
     bremin_code = models.CharField(unique=True, max_length=9, blank=True, null=True)
     createdat = models.DateTimeField(db_column='createdAt', blank=True, null=True)  # Field name made lowercase.
@@ -84,7 +84,7 @@ class OrderTypes(models.Model):
         db_table_comment = '╥шя√ чр тюъ эр ╬╩'
 
 
-class WorkPackages(models.Model):
+class WorkPackage(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     work_package = models.CharField(max_length=150, blank=True, null=True, db_comment='╩юьяыхъё ЁрсюЄ')
     construct_object_guid = models.CharField(db_column='construct_object_GUID', max_length=150, blank=True, null=True, db_comment='╤ё√ыър')  # Field name made lowercase.
