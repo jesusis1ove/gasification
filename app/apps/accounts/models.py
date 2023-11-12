@@ -10,7 +10,8 @@ from .managers import UserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(_('email address'), unique=True)
+    login = models.CharField(_('login'), max_length=100, unique=True)
+    email = models.EmailField(_('email address'), blank=True, null=True)
     name = models.CharField(_('name'), max_length=150, blank=True)
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
     is_staff = models.BooleanField(_('is staff'), default=True)
@@ -18,7 +19,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'login'
     REQUIRED_FIELDS = []
 
     class Meta:
