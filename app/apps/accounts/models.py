@@ -8,6 +8,8 @@ from django.utils.translation import gettext_lazy as _
 
 from .managers import UserManager
 
+from ..erp_data.models import Counterparty
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     login = models.CharField(_('login'), max_length=100, unique=True)
@@ -31,3 +33,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
+
+    def get_counterparty_guid(self):
+        counterparty = Counterparty.objects.filter(counterparty_inn=self.login)
+        if not counterparty:
+            return None
+        return counterparty[0].guid
+
+

@@ -5,7 +5,7 @@ from .models import Counterparty, ConstructionObject, OrderType
 
 @admin.register(Counterparty)
 class CounterpartyAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('id', 'name', 'counterparty_inn', 'guid',)
 
 
 @admin.register(ConstructionObject)

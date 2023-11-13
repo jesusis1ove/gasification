@@ -46,3 +46,9 @@ class UserSignupSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
+
+
+class UserAsCounterpartySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('login', )
