@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
 from .serializers import ConfigurationSerializer, OrderCreateSerializer, OrderListSerializer, OrderUpdateSerializer
-from .models import Configuration, Order, ORDER_STATUSES
+from .models import Configuration, Order
 from .permissions import IsOrderOwnerOrReadOnly
 
 
