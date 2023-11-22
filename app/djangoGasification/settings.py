@@ -108,17 +108,17 @@ DATABASES = {
         'HOST': os.environ.get("SQL_HOST", "localhost"),
         'PORT': os.environ.get("SQL_PORT", "5432"),
     },
-    'erp_data': {
-        'ENGINE': os.environ.get("EX_SQL_ENGINE", "django.db.backends.sqlite3"),
-        'NAME': os.environ.get("EX_SQL_DATABASE", os.path.join(BASE_DIR, "erpdata.sqlite3")),
-        'USER': os.environ.get("EX_SQL_USER", "user"),
-        'PASSWORD': os.environ.get("EX_SQL_PASSWORD", "password"),
-        'HOST': os.environ.get("EX_SQL_HOST", "localhost"),
-        'PORT': os.environ.get("EX_SQL_PORT", "5432"),
-    }
+    # 'erp_data': {
+    #     'ENGINE': os.environ.get("EX_SQL_ENGINE", "django.db.backends.sqlite3"),
+    #     'NAME': os.environ.get("EX_SQL_DATABASE", os.path.join(BASE_DIR, "erpdata.sqlite3")),
+    #     'USER': os.environ.get("EX_SQL_USER", "user"),
+    #     'PASSWORD': os.environ.get("EX_SQL_PASSWORD", "password"),
+    #     'HOST': os.environ.get("EX_SQL_HOST", "localhost"),
+    #     'PORT': os.environ.get("EX_SQL_PORT", "5432"),
+    # }
 }
 
-DATABASE_ROUTERS = ['djangoGasification.db_routers.ErpDataRouter',]
+#DATABASE_ROUTERS = ['djangoGasification.db_routers.ErpDataRouter',]
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

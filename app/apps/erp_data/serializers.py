@@ -12,7 +12,7 @@ class CounterpartySerializer(serializers.ModelSerializer):
 class ConstructionObjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = ConstructionObject
-        fields = '__all__'
+        fields = ('bremin_code', 'guid')
 
 
 class OrderTypeSerializer(serializers.ModelSerializer):
