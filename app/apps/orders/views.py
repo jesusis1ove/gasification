@@ -3,6 +3,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
+from rest_framework.exceptions import PermissionDenied, AuthenticationFailed, NotAuthenticated
 
 from .serializers import ConfigurationSerializer, OrderCreateSerializer, OrderListSerializer, OrderUpdateSerializer
 from .models import Configuration, Order
@@ -64,9 +65,26 @@ class OrderViewSet(viewsets.ModelViewSet):
         instance.set_accepted()
         return Response({'success': True}, status=status.HTTP_200_OK)
 
+    @action(detail=True, url_path='confirm', methods=['path', 'put'], permission_classes=[IsOrderOwnerOrReadOnly])
+    def set_accepted_by_user(self, request, pk):
+        instance = self.get_object()
+        if instance.status == 'on_confirm':
+            instance.set_accepted()
+            return Response({'success': True}, status=status.HTTP_200_OK)
+        return Response({'success': False, 'detail': PermissionDenied.default_detail},
+                        status=PermissionDenied.status_code)
+
     @action(detail=True, url_path='cancel', methods=['path', 'put'],
             permission_classes=[IsAdminUser, IsOrderOwnerOrReadOnly])
     def set_cancelled(self, request, pk):
         instance = self.get_object()
         instance.set_cancelled()
         return Response({'success': True}, status=status.HTTP_200_OK)
+
+    @action(detail=True, url_path='on-confirm', methods=['path', 'put'], permission_classes=[IsAdminUser])
+    def set_on_confirm(self, request, pk):
+        date_on_confirm = request.data.get('date_confirm')
+        instance = self.get_object()
+        instance.set_on_confirm(date_on_confirm)
+        return Response({'success': True}, status=status.HTTP_200_OK)
+
