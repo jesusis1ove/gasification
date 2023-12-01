@@ -29,23 +29,28 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def set_accepted(self):
-        if self.status in ('created', 'on_confirm'):
-            self.status = 'accepted'
-            self.save()
+    def accept(self):
+        self.status = 'accepted'
+        self.save()
 
-    def set_cancelled(self):
-        if self.status in ('created', 'accepted',):
-            self.status = 'cancelled'
-            self.save()
+    def cancel(self):
+        self.status = 'cancelled'
+        self.save()
 
-    def set_on_confirm(self, date_confirm):
-        if self.status in ('created',):
-            self.status = 'on_confirm'
-            self.date_confirm = date_confirm
-            self.save()
+    def on_confirm(self, date_confirm):
+        self.status = 'on_confirm'
+        self.date_confirm = date_confirm
+        self.save()
 
+    def confirm(self):
+        # if self.status != 'on_confirm':
+        #     raise Exception('status conflict')
+        self.date = self.date_confirm
+        self.status = 'accepted'
+        self.save()
 
-
-
-
+    def decline(self):
+        if self.status != 'on_confirm':
+            raise Exception('status conflict')
+        self.status = 'accepted'
+        self.save()
