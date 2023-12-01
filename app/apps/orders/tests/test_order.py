@@ -57,5 +57,38 @@ class OrderAsUserTest(APITestCase):
         response = self.client.put(url)
         self.assertEquals(response.status_code, status.HTTP_200_OK)
 
+    def test_on_confirm(self):
+        url = reverse('orders-detail', args=[self.order.id])
+        url = f'{url}on-confirm/'
+        response = self.client.put(url)
+        self.assertEquals(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_confirm(self):
+        self.order.on_confirm(date_confirm='2023-01-01')
+
+        url = reverse('orders-detail', args=[self.order.id])
+        url = f'{url}confirm/'
+        response = self.client.put(url)
+        self.order.refresh_from_db()
+
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEquals(self.order.status, 'accepted')
+        self.assertEquals(self.order.date, self.order.date_confirm)
+
+    def test_decline(self):
+        self.order.on_confirm(date_confirm='2023-01-01')
+        prev_date = self.order.date
+
+        url = reverse('orders-detail', args=[self.order.id])
+        url = f'{url}decline/'
+        response = self.client.put(url)
+        self.order.refresh_from_db()
+
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEquals(self.order.status, 'accepted')
+        self.assertEquals(self.order.date, prev_date)
+
+
+
 
 
