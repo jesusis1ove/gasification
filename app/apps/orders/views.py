@@ -68,7 +68,6 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, url_path='confirm', methods=['path', 'put'], permission_classes=[IsOrderOwnerOrReadOnly])
     def confirm(self, request, pk):
-        print('11111111111111 CONFIRM')
         instance = self.get_object()
         if instance.status == 'on_confirm':
             instance.confirm()

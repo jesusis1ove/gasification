@@ -76,7 +76,7 @@ class OrderAsUserTest(APITestCase):
         self.assertEquals(self.order.date, self.order.date_confirm)
 
     def test_decline(self):
-        self.order.on_confirm(date_confirm='2023-01-01')
+        self.order.on_confirm(date_confirm=datetime.date.today())
         prev_date = self.order.date
 
         url = reverse('orders-detail', args=[self.order.id])
