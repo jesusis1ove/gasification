@@ -46,45 +46,40 @@ class OrderViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        if self.request.user != instance.created_by and not self.request.user.is_staff:
-            return Response(status=status.HTTP_403_FORBIDDEN)
-        if request.data.get('status'):
-            new_status = request.data.get('status')
-            if instance.status != new_status:
-                if new_status == 'accepted' and not self.request.user.is_staff:
-                    return Response(status=status.HTTP_403_FORBIDDEN)
-
-                print('меняем статус')
-        return super().update(request, *args, **kwargs)
-
     @action(detail=True, url_path='accept', methods=['path', 'put'], permission_classes=[IsAdminUser])
-    def set_accepted(self, request, pk):
+    def accept(self, request, pk):
         instance = self.get_object()
-        instance.set_accepted()
+        instance.accept()
+        return Response({'success': True}, status=status.HTTP_200_OK)
+
+    @action(detail=True, url_path='cancel', methods=['path', 'put'],
+            permission_classes=[IsAdminUser | IsOrderOwnerOrReadOnly])
+    def cancel(self, request, pk):
+        instance = self.get_object()
+        instance.cancel()
+        return Response({'success': True}, status=status.HTTP_200_OK)
+
+    @action(detail=True, url_path='on-confirm', methods=['path', 'put'], permission_classes=[IsAdminUser])
+    def on_confirm(self, request, pk):
+        date_on_confirm = request.data.get('date_confirm')
+        instance = self.get_object()
+        instance.on_confirm(date_on_confirm)
         return Response({'success': True}, status=status.HTTP_200_OK)
 
     @action(detail=True, url_path='confirm', methods=['path', 'put'], permission_classes=[IsOrderOwnerOrReadOnly])
-    def set_accepted_by_user(self, request, pk):
+    def confirm(self, request, pk):
         instance = self.get_object()
         if instance.status == 'on_confirm':
-            instance.set_accepted()
+            instance.confirm()
             return Response({'success': True}, status=status.HTTP_200_OK)
         return Response({'success': False, 'detail': PermissionDenied.default_detail},
                         status=PermissionDenied.status_code)
 
-    @action(detail=True, url_path='cancel', methods=['path', 'put'],
-            permission_classes=[IsAdminUser, IsOrderOwnerOrReadOnly])
-    def set_cancelled(self, request, pk):
+    @action(detail=True, url_path='decline', methods=['patch', 'put'], permission_classes=[IsOrderOwnerOrReadOnly])
+    def decline(self, request, pk):
         instance = self.get_object()
-        instance.set_cancelled()
-        return Response({'success': True}, status=status.HTTP_200_OK)
-
-    @action(detail=True, url_path='on-confirm', methods=['path', 'put'], permission_classes=[IsAdminUser])
-    def set_on_confirm(self, request, pk):
-        date_on_confirm = request.data.get('date_confirm')
-        instance = self.get_object()
-        instance.set_on_confirm(date_on_confirm)
-        return Response({'success': True}, status=status.HTTP_200_OK)
-
+        if instance.status == 'on_confirm':
+            instance.decline()
+            return Response({'success': True}, status=status.HTTP_200_OK)
+        return Response({'success': False, 'detail': PermissionDenied.default_detail},
+                        status=PermissionDenied.status_code)
